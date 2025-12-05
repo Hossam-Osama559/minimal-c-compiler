@@ -1,0 +1,266 @@
+#include "token_detector.h"
+
+bool token_detector::is_newline(){
+    char current=lexer_obj.current_char[0];
+
+    return current=='\n';
+}
+
+
+
+bool token_detector::is_char(){
+
+    char current=lexer_obj.current_char[0];
+
+    if (current<='z'&&current>='A'){
+
+        return 1 ;
+    }
+    return 0;
+}
+
+
+bool token_detector::is_number(){
+    char current=lexer_obj.current_char[0];
+
+    if (current>='0'&&current<='9'){
+
+        return 1 ;
+    }
+
+    return 0;
+}
+
+
+bool token_detector::is_quote(){
+
+    char current=lexer_obj.current_char[0];
+
+    if (current=='"'){
+
+        return 1 ;
+    }
+    return 0;
+}
+
+
+bool token_detector::is_ws(){
+
+    char current=lexer_obj.current_char[0];
+
+    if (current==' '){
+
+        return 1;
+    }
+    
+    return 0;
+}
+
+// consume white spaces or new lines 
+void token_detector::consume_ws(){
+
+    while (!lexer_obj.eof()&&(is_ws()||is_newline())){
+
+           lexer_obj.advance_current_char();
+    }
+}
+
+
+token_detector::token_detector(lexer &curr_lexer):lexer_obj(curr_lexer){
+    // cout<<"from the token detector object "<<&curr_lexer<<endl;
+
+    // lexer_obj=curr_lexer;
+
+}
+
+
+void token_detector::start_lexing(token &result ){
+
+
+    if (!lexer_obj.eof()){
+
+    consume_ws();
+
+    identifier_tok(result);
+
+    }
+}
+
+
+// start with letter then any compination of letters and digits 
+void token_detector::identifier_tok(token &result){
+
+if (is_char()){
+
+    lexer_obj.advance_current_char();
+
+    while (!lexer_obj.eof()&&(is_char()||is_number())){
+
+        lexer_obj.advance_current_char();
+    }
+
+    result.kind=identifier;
+}
+
+else {
+
+    int_const(result);
+
+}
+
+}
+
+void token_detector::int_const(token &result){
+
+
+    if (is_number()){
+
+    while (!lexer_obj.eof()&&is_number()){
+
+        lexer_obj.advance_current_char();
+    }
+
+    if (lexer_obj.eof()||is_ws()){
+
+
+        result.kind=numeric_constant;
+
+    }
+
+
+    // wrong number 123aa
+    else{
+
+
+
+    } 
+
+    }
+
+    // calls the next detector
+    else {
+
+        literal_string(result);
+
+    }
+
+}
+
+
+void token_detector::literal_string(token &result){
+
+ 
+    if (is_quote()){
+
+        lexer_obj.advance_current_char();
+
+        while (!lexer_obj.eof()&&!is_quote()){
+
+            lexer_obj.advance_current_char();
+        }
+
+        // not closed string literal like "abc
+        if (lexer_obj.eof()){
+
+
+
+        }
+
+        else {
+
+            result.kind=string_literal;
+        }
+    }
+
+    else {
+
+        l_paren_tok(result);
+    }
+
+}
+
+void token_detector::l_paren_tok(token &result){
+
+    if (lexer_obj.current_char[0]=='('){
+        lexer_obj.advance_current_char();
+
+        result.kind=tk_l_paren;
+    }
+    else {
+
+        r_paren_tok(result);
+    }
+}
+
+void token_detector::r_paren_tok(token &result){
+    if (lexer_obj.current_char[0]==')'){
+        lexer_obj.advance_current_char();
+
+        result.kind=tk_r_paren;
+    }
+    else {
+
+        l_brace_tok(result);
+    }
+
+}
+
+
+void token_detector::l_brace_tok(token &result){
+    if (lexer_obj.current_char[0]=='{'){
+        lexer_obj.advance_current_char();
+
+        result.kind=tk_l_brace;
+    }
+    else {
+
+        r_brace_tok(result);
+    }
+
+}
+
+
+void token_detector::r_brace_tok(token &result){
+    if (lexer_obj.current_char[0]=='}'){
+
+        result.kind=tk_r_brace;
+        lexer_obj.advance_current_char();
+
+    }
+    else {
+
+        equal_tok(result);
+    }
+
+}
+
+
+void token_detector::equal_tok(token &result){
+    if (lexer_obj.current_char[0]=='='){
+
+        result.kind=tk_equal;
+        lexer_obj.advance_current_char();
+
+    }
+    else {
+
+        equalequal(result);
+    }
+
+}
+
+
+void token_detector::equalequal(token &result){
+    if (lexer_obj.current_char[0]=='='&&lexer_obj.next_char()&&lexer_obj.next_char()[0]=='='){
+
+        result.kind=tk_equalequal;
+
+        lexer_obj.advance_current_char();
+        lexer_obj.advance_current_char();
+
+    }
+    else {
+
+    }
+
+}
