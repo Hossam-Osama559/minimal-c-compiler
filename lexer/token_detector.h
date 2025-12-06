@@ -86,4 +86,8 @@ bool is_quote(); // "
 
 bool is_newline();
 
+void undefined_tok(token &result);
+
+void eof_token(token &result);
+
 };

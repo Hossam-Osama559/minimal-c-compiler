@@ -119,21 +119,14 @@ int main(){
 
     // cout<<"here we are "<<&obj.current_char<<endl;
 
+    token res=token();
 
-    token res=obj.next_token();
+    while (res.kind!=eof){
 
-    cout<<"done"<<" "<<res.kind<<" "<<identifier<<" "<<res.value.string_value<<endl;
+          res=obj.next_token();
 
-    
-    res=obj.next_token();
-    cout<<"done"<<" "<<res.kind<<" "<<numeric_constant<<" "<<res.value.string_value<<endl;
-    // cout<<obj.current_char[1]<<endl;
-    res=obj.next_token();
-    cout<<"done"<<" "<<res.kind<<" "<<string_literal<<" "<<res.value.string_value<<endl;
-    // cout<<obj.current_char[1]<<endl;
-    res=obj.next_token();
+          cout<<res.kind<<" "<<res.err<<" "<<res.is_there_errors<<" "<<res.is_key<<" "<<res.keyword_type<<" "<<res.value.string_value<<" "<<endl;
+    }
 
-
-    cout<<"done "<<res.is_key<<" "<<res.keyword_type<<endl;
 
 }
