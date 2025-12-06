@@ -24,6 +24,17 @@ number_of_tokens
 // #undef KEYWORD
 };
 
+
+enum token_errors:int{
+
+wrong_int,
+unclosed_string,
+wrong_identifier,
+undefined,
+number_of_errors
+};
+
+
 struct position{
 
 int row;
@@ -51,6 +62,10 @@ public:
 tokenkinds kind;
 
 token_value value;
+
+token_errors err;
+
+bool is_there_errors;
 
 bool is_key;
 
