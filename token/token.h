@@ -1,11 +1,23 @@
 #include <iostream>
 #include<map>
+#include<string>
 using namespace std;
 
 
 
 
-enum tokenkinds :int;
+enum tokenkinds:int{
+#define TOK(X) X,
+#define PUNCTUATOR(X,Y) TOK(tk_ ##X)
+#define KEYWORD(X,Y)    TOK(kw_ ## X)
+
+#include "tokenkinds.def"
+
+number_of_tokens
+#undef TOK
+#undef PUNCTUATOR
+#undef KEYWORD
+};
 
 struct position{
 
@@ -14,13 +26,32 @@ int col;
 
 };
 
+
+
+/*
+
+there are some tokens that have values , and the value may be int or may be a string 
+
+*/
+struct token_value{
+
+int int_value;
+
+string string_value;
+
+};
+
 class token{
 public:
 tokenkinds kind;
 
+token_value value;
+
 position token_position;
 
 token(tokenkinds kind,position token_position);
+
+token();
 
 tokenkinds token_type();
 };
