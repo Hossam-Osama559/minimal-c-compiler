@@ -29,7 +29,7 @@ keyword::keyword(){
 
     keyword_numbers=13;
 
-    #define KEYWORD(X,Y) "kw_"#X,
+    #define KEYWORD(X,Y) #X,
 
     char * arr[]={
         #include "keywords.def"
