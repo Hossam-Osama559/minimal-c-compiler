@@ -89,29 +89,6 @@ PUNCTUATOR(equalequal,          "==")
 PUNCTUATOR(comma,               ",")
 
 
-KEYWORD(break                       , KEYALL)
-
-KEYWORD(char                        , KEYALL)
-
-KEYWORD(continue                    , KEYALL)
-
-KEYWORD(double                      , KEYALL)
-KEYWORD(else                        , KEYALL)
-
-
-KEYWORD(float                       , KEYALL)
-KEYWORD(for                         , KEYALL)
-
-KEYWORD(if                          , KEYALL)
-KEYWORD(int                         , KEYALL)
-
-KEYWORD(long                        , KEYALL)
-KEYWORD(return                      , KEYALL)
-
-
-
-KEYWORD(void                        , KEYALL)
-KEYWORD(while                       , KEYALL)
 
 
 
