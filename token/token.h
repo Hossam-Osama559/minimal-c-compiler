@@ -9,14 +9,14 @@ using namespace std;
 enum tokenkinds:int{
 #define TOK(X) X,
 #define PUNCTUATOR(X,Y) TOK(tk_ ##X)
-#define KEYWORD(X,Y)    TOK(kw_ ## X)
+// #define KEYWORD(X,Y)    TOK(kw_ ## X)
 
 #include "tokenkinds.def"
 
 number_of_tokens
 #undef TOK
 #undef PUNCTUATOR
-#undef KEYWORD
+// #undef KEYWORD
 };
 
 struct position{
@@ -46,6 +46,10 @@ public:
 tokenkinds kind;
 
 token_value value;
+
+bool is_key;
+
+string keyword_type;
 
 position token_position;
 
