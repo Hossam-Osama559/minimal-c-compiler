@@ -1,10 +1,15 @@
-#include <iostream>
+#include<iostream>
 #include<map>
 #include<string>
+#include<cstring>
 using namespace std;
 
 
-
+struct cmp_str {
+    bool operator()(const char* a, const char* b) const {
+        return std::strcmp(a, b) < 0;
+    }
+};
 
 enum tokenkinds:int{
 #define TOK(X) X,
@@ -64,7 +69,7 @@ tokenkinds token_type();
 class keyword{
 public:
 int keyword_numbers;
-map<char *,bool> keywords_token;
+map<char *,bool,cmp_str> keywords_token;
 
 bool is_keyword(char * type);
 
