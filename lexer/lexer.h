@@ -8,6 +8,8 @@ class lexer{
 public:
     string file_name;
 
+    string current_token_value;
+
 
     char *file_buffer; //start of the buffer
     char *buffer_end;
@@ -24,6 +26,10 @@ public:
     bool eof();
 
     char * next_char();
+
+    void add_char_to_current_token_value();
+
+    void clear_current_token_value();
 
      
 };

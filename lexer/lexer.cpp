@@ -22,6 +22,20 @@ lexer::lexer(char * file_name){
 }
 
 
+void lexer::add_char_to_current_token_value(){
+
+    char current=current_char[0];
+
+    current_token_value+=current;
+
+}
+
+
+void lexer::clear_current_token_value(){
+
+    current_token_value="";
+}
+
 token lexer::next_token(){
 
     // cout<<"from the lexer object "<<this<<endl;
@@ -108,13 +122,18 @@ int main(){
 
     token res=obj.next_token();
 
-    cout<<"done"<<" "<<res.kind<<" "<<identifier<<endl;
+    cout<<"done"<<" "<<res.kind<<" "<<identifier<<" "<<res.value.string_value<<endl;
 
-    cout<<obj.current_char[1]<<endl;
+    
     res=obj.next_token();
-    cout<<"done"<<" "<<res.kind<<" "<<numeric_constant<<endl;
-    cout<<obj.current_char[1]<<endl;
+    cout<<"done"<<" "<<res.kind<<" "<<numeric_constant<<" "<<res.value.string_value<<endl;
+    // cout<<obj.current_char[1]<<endl;
     res=obj.next_token();
-    cout<<"done"<<" "<<res.kind<<" "<<string_literal<<endl;
+    cout<<"done"<<" "<<res.kind<<" "<<string_literal<<" "<<res.value.string_value<<endl;
+    // cout<<obj.current_char[1]<<endl;
+    res=obj.next_token();
+
+
+    cout<<"done "<<res.is_key<<" "<<res.keyword_type<<endl;
 
 }

@@ -63,6 +63,8 @@ void token_detector::consume_ws(){
 
            lexer_obj.advance_current_char();
     }
+
+   
 }
 
 
@@ -91,15 +93,32 @@ void token_detector::start_lexing(token &result ){
 void token_detector::identifier_tok(token &result){
 
 if (is_char()){
+    lexer_obj.add_char_to_current_token_value();
 
     lexer_obj.advance_current_char();
 
     while (!lexer_obj.eof()&&(is_char()||is_number())){
-
+        lexer_obj.add_char_to_current_token_value();
         lexer_obj.advance_current_char();
     }
 
-    result.kind=identifier;
+
+    // here we need to check if the token is identifier or reserved keyword
+    if (keyword().is_keyword(lexer_obj.current_token_value.data())) {
+
+        result.is_key=1;
+        result.keyword_type=lexer_obj.current_token_value;
+    }
+
+    else {
+
+        result.is_key=0;
+        result.kind=identifier; 
+        result.value.string_value=lexer_obj.current_token_value;
+    }
+    
+   
+    lexer_obj.clear_current_token_value();
 }
 
 else {
@@ -116,6 +135,7 @@ void token_detector::int_const(token &result){
     if (is_number()){
 
     while (!lexer_obj.eof()&&is_number()){
+        lexer_obj.add_char_to_current_token_value();
 
         lexer_obj.advance_current_char();
     }
@@ -124,6 +144,8 @@ void token_detector::int_const(token &result){
 
 
         result.kind=numeric_constant;
+        result.value.string_value=lexer_obj.current_token_value;
+        lexer_obj.clear_current_token_value();
 
     }
 
@@ -131,7 +153,14 @@ void token_detector::int_const(token &result){
     // wrong number 123aa
     else{
 
+        while (!lexer_obj.eof()&&!is_ws()){
+            lexer_obj.add_char_to_current_token_value();
+            lexer_obj.advance_current_char();
+        }
+        lexer_obj.clear_current_token_value();
 
+
+        cout<<"wrong number with value "<<lexer_obj.current_token_value<<endl;
 
     } 
 
@@ -139,6 +168,7 @@ void token_detector::int_const(token &result){
 
     // calls the next detector
     else {
+
 
         literal_string(result);
 
@@ -155,6 +185,7 @@ void token_detector::literal_string(token &result){
         lexer_obj.advance_current_char();
 
         while (!lexer_obj.eof()&&!is_quote()){
+            lexer_obj.add_char_to_current_token_value();
 
             lexer_obj.advance_current_char();
         }
@@ -162,20 +193,26 @@ void token_detector::literal_string(token &result){
         // not closed string literal like "abc
         if (lexer_obj.eof()){
 
-
+            cout<<"not closing string "<<'"'<<lexer_obj.current_token_value<<endl;
 
         }
 
         else {
+            lexer_obj.advance_current_char();
 
             result.kind=string_literal;
+            result.value.string_value=lexer_obj.current_token_value;
         }
+
+        lexer_obj.clear_current_token_value();
     }
 
     else {
 
         l_paren_tok(result);
     }
+
+  
 
 }
 
