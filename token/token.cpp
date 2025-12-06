@@ -4,21 +4,13 @@ using namespace std;
 
 
 
-enum tokenkinds:int{
-#define TOK(X) X,
-#define PUNCTUATOR(X,Y) TOK(X)
-#define KEYWORD(X,Y)    TOK(kw_ ## X)
-
-#include "tokenkinds.def"
-
-number_of_tokens
-#undef TOK
-#undef PUNCTUATOR
-#undef KEYWORD
-};
 
 
 
+token::token(){
+
+    
+}
 
 token::token(tokenkinds tok_kind,position tok_position){
 
