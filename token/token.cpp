@@ -1,4 +1,4 @@
-#include <iostream>
+
 #include "token.h"
 using namespace std;
 
@@ -23,6 +23,9 @@ tokenkinds token::token_type(){
 
     return this->kind;
 }
+
+
+
 
 
 keyword::keyword(){
@@ -53,5 +56,5 @@ bool keyword::is_keyword(char * type){
 
 //      keyword obj;
 
-//      cout<<obj.is_keyword("kw_double");
+//      cout<<obj.is_keyword("int");
 // }
