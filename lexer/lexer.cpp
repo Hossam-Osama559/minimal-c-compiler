@@ -111,22 +111,22 @@ if (!file.read(filebuf,file_size)){
 
 
 
-int main(){
+// int main(){
 
-    lexer obj("temp");
+//     lexer obj("temp");
 
-    // cout<<"here we are from the main stack frame "<<&obj<<endl;
+//     // cout<<"here we are from the main stack frame "<<&obj<<endl;
 
-    // cout<<"here we are "<<&obj.current_char<<endl;
+//     // cout<<"here we are "<<&obj.current_char<<endl;
 
-    token res=token();
+//     token res=token();
 
-    while (res.kind!=eof){
+//     while (res.kind!=eof){
 
-          res=obj.next_token();
+//           res=obj.next_token();
 
-          cout<<res.kind<<" "<<res.err<<" "<<res.is_there_errors<<" "<<res.is_key<<" "<<res.keyword_type<<" "<<res.value.string_value<<" "<<endl;
-    }
+//           cout<<res.kind<<" "<<res.err<<" "<<res.is_there_errors<<" "<<res.is_key<<" "<<res.keyword_type<<" "<<res.value.string_value<<" "<<endl;
+//     }
 
 
-}
+// }

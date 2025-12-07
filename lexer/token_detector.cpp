@@ -122,13 +122,14 @@ if (is_char()){
     // here we need to check if the token is identifier or reserved keyword
     if (keyword().is_keyword(lexer_obj.current_token_value.data())) {
         result.is_there_errors=0;
-        
+        result.err=noerrors;
         result.is_key=1;
         result.keyword_type=lexer_obj.current_token_value;
+        result.kind=keyword_tok;
     }
 
     else {
-
+        result.err=noerrors;
         result.is_key=0;
         result.is_there_errors=0;
         result.kind=identifier; 
@@ -160,7 +161,7 @@ void token_detector::int_const(token &result){
 
     if (lexer_obj.eof()||is_ws()){
         result.is_there_errors=0;
-
+        result.err=noerrors;
         result.kind=numeric_constant;
         result.value.string_value=lexer_obj.current_token_value;
         lexer_obj.clear_current_token_value();
@@ -206,14 +207,14 @@ void token_detector::literal_string(token &result){
 
         lexer_obj.advance_current_char();
 
-        while (!lexer_obj.eof()&&!is_quote()){
+        while (!lexer_obj.eof()&&!is_quote()&&!is_newline()){
             lexer_obj.add_char_to_current_token_value();
 
             lexer_obj.advance_current_char();
         }
 
         // not closed string literal like "abc
-        if (lexer_obj.eof()){
+        if (!is_quote()){
             result.is_there_errors=1;
             result.err=unclosed_string;
             result.value.string_value=lexer_obj.current_token_value;
@@ -223,6 +224,7 @@ void token_detector::literal_string(token &result){
 
         else {
             lexer_obj.advance_current_char();
+            result.err=noerrors;
             result.is_there_errors=0;
             result.kind=string_literal;
             result.value.string_value=lexer_obj.current_token_value;
