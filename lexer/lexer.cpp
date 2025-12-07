@@ -19,6 +19,7 @@ lexer::lexer(char * file_name){
    current_char=file_buffer;
 
    buffer_end=file_buffer+size-1;
+//    cout<<(buffer_end[0]=='t')<<endl;
 }
 
 
