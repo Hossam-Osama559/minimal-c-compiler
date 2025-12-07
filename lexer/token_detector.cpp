@@ -78,10 +78,10 @@ token_detector::token_detector(lexer &curr_lexer):lexer_obj(curr_lexer){
 
 void token_detector::start_lexing(token &result ){
 
-
+    consume_ws();//consume white spaces and new lines 
     if (!lexer_obj.eof()){
 
-    consume_ws();
+
 
     identifier_tok(result);
 
@@ -97,7 +97,6 @@ void token_detector::start_lexing(token &result ){
 void token_detector::eof_token(token &result){
 
     if (lexer_obj.eof()){
-
         result.kind=eof;
         result.is_key=0;
         result.is_there_errors=0;
@@ -159,7 +158,7 @@ void token_detector::int_const(token &result){
         lexer_obj.advance_current_char();
     }
 
-    if (lexer_obj.eof()||is_ws()){
+    if (lexer_obj.eof()||is_ws()||is_newline()){
         result.is_there_errors=0;
         result.err=noerrors;
         result.kind=numeric_constant;
