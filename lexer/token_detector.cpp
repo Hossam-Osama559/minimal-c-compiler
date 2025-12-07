@@ -207,14 +207,14 @@ void token_detector::literal_string(token &result){
 
         lexer_obj.advance_current_char();
 
-        while (!lexer_obj.eof()&&!is_quote()){
+        while (!lexer_obj.eof()&&!is_quote()&&!is_newline()){
             lexer_obj.add_char_to_current_token_value();
 
             lexer_obj.advance_current_char();
         }
 
         // not closed string literal like "abc
-        if (lexer_obj.eof()){
+        if (!is_quote()){
             result.is_there_errors=1;
             result.err=unclosed_string;
             result.value.string_value=lexer_obj.current_token_value;
