@@ -17,7 +17,7 @@ enum tokenkinds:int{
 // #define KEYWORD(X,Y)    TOK(kw_ ## X)
 
 #include "tokenkinds.def"
-keyword,
+keyword_tok,
 number_of_tokens
 #undef TOK
 #undef PUNCTUATOR
