@@ -158,7 +158,7 @@ void token_detector::int_const(token &result){
         lexer_obj.advance_current_char();
     }
 
-    if (lexer_obj.eof()||is_ws()){
+    if (lexer_obj.eof()||is_ws()||is_newline()){
         result.is_there_errors=0;
         result.err=noerrors;
         result.kind=numeric_constant;
