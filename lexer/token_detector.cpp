@@ -322,12 +322,35 @@ void token_detector::equalequal(token &result){
 
     }
     else {
-        undefined_tok(result);
-    }
+            semi(result);
+        }
 
 
     
 }
+
+
+
+void token_detector::semi(token &result){
+
+
+    if (lexer_obj.current_char[0]==';'){
+
+        result.kind=tk_semi;
+        result.err=noerrors;
+        result.is_there_errors=0;
+        result.is_key=0;
+        lexer_obj.advance_current_char();
+        
+    }
+
+    else {
+
+        undefined_tok(result);
+    }
+
+}
+
 
 
 void token_detector::undefined_tok(token &result){

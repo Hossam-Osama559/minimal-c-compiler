@@ -74,6 +74,8 @@ void minusequal(token &result); //-=
 
 void is_keyword(token &result);
 
+void semi(token &result);
+
 void consume_ws();
 
 bool is_char();
