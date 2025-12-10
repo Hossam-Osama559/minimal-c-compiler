@@ -24,7 +24,8 @@ enum type_specifier{
 enum node_types:int{
 
 	variable_declaration,
-	translation_unit
+	translation_unit,
+	function_decl
 
 
 };
@@ -91,6 +92,22 @@ vector<ast_node *> declarations;
 
 
 
+class function_dec_node :public ast_node{
+public:
+
+function_dec_node();
+
+string type;
+
+string name;
+
+vector<ast_node*> parameter_list;  //list of parameters 
+
+vector<ast_node*>body;
+
+};
+
+
 
 /*
 the parser class will construct with non paramatrized constructor and inside the constructor 
@@ -132,6 +149,18 @@ public:
 	ast_node* var_decl();  // this will return a one var decl stmt to decalrations function 
 
 	ast_node* fun_decl();
+
+	string type_specifier();
+
+	string declarator();
+
+	bool parameter_list(vector<ast_node*> &para_list);
+
+	bool compound_stmt(vector<ast_node*>&stmt_seq);
+
+	bool stmt_seq(vector<ast_node*>&stmts);
+
+	int return_stmt(bool x);// 0 for function of void type and 1 for other types 
 
 	void init_decl_list(vector<identifier_initializer*> &init_list);  
 
