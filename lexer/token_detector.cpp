@@ -366,9 +366,100 @@ void token_detector::comma(token &result){
 
     else {
 
-        undefined_tok(result);
+        oneline_comment_token(result);
     }
 
+}
+
+
+void token_detector::oneline_comment_token(token &result){
+    if (lexer_obj.current_char[0]=='/'&&lexer_obj.next_char()&&lexer_obj.next_char()[0]=='/'){
+
+        result.kind=oneline_comment;
+
+        while (!lexer_obj.eof()&&!is_newline()){
+            lexer_obj.add_char_to_current_token_value();
+            lexer_obj.advance_current_char();
+        }
+        result.is_key=0;
+        result.err=noerrors;
+        result.is_there_errors=0;
+        result.value.string_value=lexer_obj.current_token_value;
+            lexer_obj.clear_current_token_value();
+
+    }
+    else {
+            multiline_comment_token(result);
+        }
+
+}
+
+bool token_detector::closing_multi_line_comment(){
+
+    if (lexer_obj.current_char[0]=='*'&&lexer_obj.next_char()&&lexer_obj.next_char()[0]=='/'){
+        return 1;
+    }
+
+    return 0;
+}
+
+
+void token_detector::multiline_comment_token(token &result){
+
+    if (lexer_obj.current_char[0]=='/'&&lexer_obj.next_char()&&lexer_obj.next_char()[0]=='*'){
+
+        result.kind=multiline_comment;
+        
+        while (!lexer_obj.eof()&&!closing_multi_line_comment()){
+
+            
+           
+            lexer_obj.add_char_to_current_token_value();
+            lexer_obj.advance_current_char();
+        }
+        
+        if (lexer_obj.eof()){
+            result.is_there_errors=1;
+            result.err=not_closed_multiline_comment;
+            result.is_key=0;
+            result.value.string_value=lexer_obj.current_token_value;
+           
+        }
+        else if (closing_multi_line_comment()){
+            lexer_obj.add_char_to_current_token_value();
+            lexer_obj.advance_current_char();
+            lexer_obj.add_char_to_current_token_value();
+            lexer_obj.advance_current_char();
+            result.is_there_errors=0;
+            result.err=noerrors;
+            result.is_key=0;
+            result.value.string_value=lexer_obj.current_token_value;
+            
+        }
+
+    lexer_obj.clear_current_token_value();
+    }
+    else {
+            minus_token(result);
+        }
+
+}
+
+
+void token_detector::minus_token(token &result){
+
+    if (lexer_obj.current_char[0]=='-'){
+        result.kind=tk_minus;
+        result.is_key=0;
+        result.err=noerrors;
+        lexer_obj.advance_current_char();
+
+    }
+
+    else {
+
+        undefined_tok(result);
+    }
 }
 
 

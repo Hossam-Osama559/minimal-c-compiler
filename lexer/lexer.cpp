@@ -116,9 +116,7 @@ if (!file.read(filebuf,file_size)){
 
 //     lexer obj("temp");
 
-//     // cout<<"here we are from the main stack frame "<<&obj<<endl;
 
-//     // cout<<"here we are "<<&obj.current_char<<endl;
 
 //     token res=token();
 

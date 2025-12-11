@@ -32,6 +32,7 @@ unclosed_string,
 wrong_identifier,
 undefined,
 noerrors,
+not_closed_multiline_comment,
 number_of_errors
 };
 
