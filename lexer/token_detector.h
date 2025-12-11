@@ -98,4 +98,6 @@ void multiline_comment_token(token &result);
 
 bool closing_multi_line_comment();
 
+void floatpoint_number(token &result);
+
 };
