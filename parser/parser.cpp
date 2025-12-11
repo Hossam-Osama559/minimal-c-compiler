@@ -20,7 +20,7 @@ parser::parser(char * filename){
     while (result.kind!=eof){
 
         result=lexer_obj.next_token();
-        if (result.kind!=eof){
+        if (result.kind!=eof&&result.kind!=oneline_comment&&result.kind!=multiline_comment){
         list_of_tokens.push_back(result);
         }
     }
@@ -102,9 +102,17 @@ function_dec_node::function_dec_node(){
 }
 
 
+selection_stmt_node::selection_stmt_node(){
+
+    node_type=select_stmt_node;
+    is_there_else=0;
+}
+
+
 ast_node::ast_node(){
 
-
+err=0;
+err_msg="";
 }
 
 
@@ -377,6 +385,188 @@ identifier_initializer* parser::init_decl(){
 }
 
 
+conditoin parser::parse_condition(){
+
+    //"(" rhs==lhs  ")"
+
+    conditoin res;
+
+    bool dummy;
+
+    token curr=next_x_token(0,dummy);
+
+    if (dummy&&curr.kind==tk_l_paren){
+        advance_current(1);
+    }
+
+    else {
+        res.err=1;
+        res.err_msg="the if statement must starts with the condition";
+        return res;
+    }
+
+    curr=next_x_token(0,dummy);
+
+    if (dummy&&(curr.kind==string_literal||curr.kind==numeric_constant||curr.kind==identifier)){
+        res.lhs=curr;
+        advance_current(1);
+    }
+
+    else if ((dummy&&curr.kind==tk_r_paren)||!dummy) {
+            // no conditions 
+            res.err=1;
+            res.err_msg="the if stmt must has an condition";
+            return res;
+    }
+
+    else {
+            res.err=1;
+            res.err_msg="not supported condition type the left hand side expression must be literal or var name";
+            return res;
+    }
+
+    curr=next_x_token(0,dummy);
+    token next=next_x_token(1,dummy);
+    
+    if (dummy&&curr.kind==tk_equal&&next.kind==tk_equal){
+        advance_current(2);
+    }
+
+    else {
+        res.err=1;
+        res.err_msg="wrong condition for the if stmt";
+        return res;
+    }
+
+    curr=next_x_token(0,dummy);
+
+    if (dummy&&(curr.kind==identifier||curr.kind==numeric_constant||curr.kind==string_literal)){
+
+        advance_current(1);
+        res.rhs=curr;
+    }
+
+    else {
+        res.err=1;
+        res.err_msg="wrong condtion for the if stmt the rhs expression must be literal or variable";
+        return res;
+    }
+
+    curr=next_x_token(0,dummy);
+
+    if (dummy&&curr.kind==tk_r_paren){
+        res.err=0;
+        advance_current(1);
+        return res;
+    }
+
+    else {
+
+        res.err=1;
+        res.err_msg="wrong if condition the condition must ends with right paren";
+        return res;
+    }
+
+
+
+
+
+
+}
+
+
+ast_node* parser::selection_stmt(){
+
+// if ( condition ) compound-statement else compound-statement
+
+    advance_current(1);
+
+    selection_stmt_node* select_stmt=new selection_stmt_node();
+
+    conditoin stmt_cond=parse_condition();
+
+    if (stmt_cond.err){
+
+        select_stmt->err=1;
+        select_stmt->err_msg=stmt_cond.err_msg;
+        return select_stmt;
+    }
+
+    select_stmt->if_cond=stmt_cond;
+
+    // then the compound stmt
+
+    bool comp_ret=compound_stmt(select_stmt->if_compound_stmt);
+
+    if (!comp_ret){
+
+        select_stmt->err=1;
+        select_stmt->err_msg="the compound statment of the if stmt must start with {";
+        return select_stmt;
+    }
+
+    // then the closing brace
+
+    bool dummy;
+    token current=next_x_token(0,dummy);
+    // cout<<"here "<<current.kind<<" "<<current.value.string_value<<endl;
+
+    if (dummy&&current.kind==tk_r_brace){
+
+        advance_current(1);
+    }
+
+    else {
+
+        select_stmt->err=1;
+        select_stmt->err_msg="expected closing the if stmt but found unsupported statment";
+        return select_stmt;
+    }
+
+    //finding else , its ok if it not exist 
+
+     
+    current=next_x_token(0,dummy);
+
+    if (dummy&&current.keyword_type=="else"){
+    
+    advance_current(1);
+
+    bool comp_ret=compound_stmt(select_stmt->if_compound_stmt);
+
+    if (!comp_ret){
+
+        select_stmt->err=1;
+        select_stmt->err_msg="the compound statment of the else stmt must start with {";
+        return select_stmt;
+    }
+
+    // then the closing brace
+
+    bool dummy;
+    token current=next_x_token(0,dummy);
+
+    if (dummy&&current.kind==tk_r_brace){
+
+        advance_current(1);
+    }
+
+    else {
+
+        select_stmt->err=1;
+        select_stmt->err_msg="expected closing the else stmt but found unsupported statment";
+        return select_stmt;
+    }
+    select_stmt->is_there_else=1;
+
+    }
+
+    select_stmt->err=0;
+    return select_stmt;
+
+}
+
+
 string parser::type_specifier(){
     bool dummy;
     token res=next_x_token(0,dummy);
@@ -433,12 +623,12 @@ bool parser::stmt_seq(vector<ast_node*>&stmts){
 
     if (dummy&&keyword_type(curr)){
         // variable
-        // cout<<"var"<<endl;
+        cout<<"var"<<endl;
         ast_node*ret=var_decl();
         // cout<<ret->node_type<<endl;
         stmts.push_back(ret);
         if (ret->err){
-            
+
             return false;
         }
 
@@ -446,7 +636,17 @@ bool parser::stmt_seq(vector<ast_node*>&stmts){
     }
 
     else if (dummy&&curr.keyword_type=="if"){
+
         // selection stmt
+        ast_node*ret=selection_stmt();
+        // cout<<ret->node_type<<endl;
+        stmts.push_back(ret);
+        if (ret->err){
+            
+            return false;
+        }
+
+        
     }
 
     else if (dummy){
@@ -474,12 +674,13 @@ bool parser::compound_stmt(vector<ast_node*>&body){
 
     // starting with {
     if (dummy&&curr.kind==tk_l_brace){
-
+        
+        cout<<"here again"<<endl;
         advance_current(1);
     }
 
     else {
-        false;
+       return false;
     }
 
     // this will consume all stmts that either variable decl or if stmts 
@@ -672,16 +873,22 @@ int main(){
 
     translation_unit_node* root=obj.parse_translation_unit();
 
-    // cout<<root->declarations.size()<<" "<<root->declarations[0]->node_type<<endl;
+    cout<<root->declarations.size()<<" "<<root->declarations[0]->node_type<<endl;
 
     function_dec_node* first=dynamic_cast<function_dec_node*>(root->declarations[0]);
 
     cout<<first->err<<endl<<first->err_msg<<endl;
 
+
+
     // cout<<first->name<<endl<<first->type<<endl<<first->body.size()<<endl;
 
-    // variable_declaration_node* var_decl=dynamic_cast<variable_declaration_node*>(first->body[0]);
+    // selection_stmt_node* var_decl=dynamic_cast<selection_stmt_node*>(first->body[0]);
 
+    // cout<<var_decl->if_cond.lhs.value.string_value<<" "<<var_decl->if_cond.rhs.value.string_value<<endl;
+
+    // cout<<var_decl->if_compound_stmt.size()<<' '<<var_decl->if_compound_stmt[0]->node_type<<endl;
+    // cout<<var_decl->is_there_else<<endl;
     // cout<<var_decl->decl_list[0]->iden.value.string_value<<endl<<var_decl->decl_list[0]->init.value.string_value<<endl;
 
 

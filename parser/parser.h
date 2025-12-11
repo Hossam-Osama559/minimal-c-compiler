@@ -25,7 +25,8 @@ enum node_types:int{
 
 	variable_declaration,
 	translation_unit,
-	function_decl
+	function_decl,
+	select_stmt_node
 
 
 };
@@ -45,6 +46,31 @@ node_types node_type;
 bool err;
 string err_msg;
 };
+
+
+struct conditoin{
+
+	token lhs;
+	token rhs;
+	bool err;
+	string err_msg;
+
+};
+
+
+class selection_stmt_node:public ast_node{
+public:
+selection_stmt_node();
+
+// condition and the only type of supported condition will be primary_exp==primary_expr
+conditoin if_cond;
+vector<ast_node*>if_compound_stmt;
+vector<ast_node*>else_compund_stmt;
+bool is_there_else;
+
+};
+
+
 /*
 this will form the list of the var decl node 
 like this int a , b , c=10;
@@ -167,6 +193,10 @@ public:
 	identifier_initializer* init_decl();  //expecting identifier and optional = then initializer
 
 
+
+	ast_node* selection_stmt();
+
+	conditoin parse_condition();
 
 };
 
