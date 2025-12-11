@@ -32,6 +32,8 @@ unclosed_string,
 wrong_identifier,
 undefined,
 noerrors,
+not_closed_multiline_comment,
+wrong_floating_number,
 number_of_errors
 };
 

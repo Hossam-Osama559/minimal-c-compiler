@@ -66,7 +66,7 @@ void slashequal(token &result); // /=
 
 void plus(token &result); //+
 
-void minus(token &result);//-
+void minus_token(token &result);//-
 
 void plusequal(token &result); //+=
 
@@ -91,5 +91,13 @@ bool is_newline();
 void undefined_tok(token &result);
 
 void eof_token(token &result);
+
+void oneline_comment_token(token &result);
+
+void multiline_comment_token(token &result);
+
+bool closing_multi_line_comment();
+
+void floatpoint_number(token &result);
 
 };

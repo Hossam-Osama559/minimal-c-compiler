@@ -37,7 +37,8 @@ TOK(char_constant)       // 'a'
 // C99 6.4.5: String Literals.
 TOK(string_literal)      // "foo"
 
-
+TOK(oneline_comment)
+TOK(multiline_comment)
 
 // C99 6.4.6: Punctuators.
 PUNCTUATOR(l_square,            "[")
