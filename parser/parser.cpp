@@ -623,7 +623,7 @@ bool parser::stmt_seq(vector<ast_node*>&stmts){
 
     if (dummy&&keyword_type(curr)){
         // variable
-        cout<<"var"<<endl;
+        // cout<<"var"<<endl;
         ast_node*ret=var_decl();
         // cout<<ret->node_type<<endl;
         stmts.push_back(ret);
@@ -675,7 +675,7 @@ bool parser::compound_stmt(vector<ast_node*>&body){
     // starting with {
     if (dummy&&curr.kind==tk_l_brace){
         
-        cout<<"here again"<<endl;
+        // cout<<"here again"<<endl;
         advance_current(1);
     }
 
@@ -873,42 +873,22 @@ int main(){
 
     translation_unit_node* root=obj.parse_translation_unit();
 
-    cout<<root->declarations.size()<<" "<<root->declarations[0]->node_type<<endl;
 
     function_dec_node* first=dynamic_cast<function_dec_node*>(root->declarations[0]);
 
-    cout<<first->err<<endl<<first->err_msg<<endl;
+    if (first->err){
+
+        cout<<"error in the source code "<<endl<<first->err_msg<<endl;
+
+    }
+
+    else {
+
+        cout<<"no syntax errors in the source code "<<endl;
+    }
 
 
 
-    // cout<<first->name<<endl<<first->type<<endl<<first->body.size()<<endl;
 
-    // selection_stmt_node* var_decl=dynamic_cast<selection_stmt_node*>(first->body[0]);
-
-    // cout<<var_decl->if_cond.lhs.value.string_value<<" "<<var_decl->if_cond.rhs.value.string_value<<endl;
-
-    // cout<<var_decl->if_compound_stmt.size()<<' '<<var_decl->if_compound_stmt[0]->node_type<<endl;
-    // cout<<var_decl->is_there_else<<endl;
-    // cout<<var_decl->decl_list[0]->iden.value.string_value<<endl<<var_decl->decl_list[0]->init.value.string_value<<endl;
-
-
-
-    // for (int i=0;i<first->decl_list.size();i++){
-
-        // cout<<first->decl_list[i]->iden.value.string_value<<" ";
-        // cout<<first->decl_list[i]->init.value.string_value<<endl;
-        // cout<<first->err_msg<<endl;
-
-    // }
-
-    // first=dynamic_cast<variable_declaration_node*>(root->declarations[1]);
-
-
-    // for (int i=0;i<first->decl_list.size();i++){
-
-    //     cout<<first->decl_list[i]->iden.value.string_value<<" ";
-    //     cout<<first->decl_list[i]->init.value.string_value<<endl;
-
-    // }
 
 }
