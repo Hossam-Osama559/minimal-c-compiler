@@ -116,17 +116,32 @@ if (!file.read(filebuf,file_size)){
 
 //     lexer obj("temp");
 
-//     // cout<<"here we are from the main stack frame "<<&obj<<endl;
-
-//     // cout<<"here we are "<<&obj.current_char<<endl;
+//     token_name_string lookup_obj;
 
 //     token res=token();
-
+//     int i=1;
 //     while (res.kind!=eof){
 
 //           res=obj.next_token();
 
-//           cout<<res.kind<<" "<<res.err<<" "<<res.is_there_errors<<" "<<res.is_key<<" "<<res.keyword_type<<" "<<res.value.string_value<<" "<<endl;
+//           if (res.kind==keyword_tok){
+
+//             cout<<"token "<<i<<": type--> keyword "<<"value--> "<<res.keyword_type<<endl;
+
+//           }
+
+//           else if (res.value.string_value.size()) {
+//             cout<<"token "<<i<<": type--> "<<lookup_obj.lookup[res.kind]<<" value->> "<<res.value.string_value<<endl;
+
+//           }
+
+//           else {
+//             cout<<"token "<<i<<": type--> "<<lookup_obj.lookup[res.kind]<<endl;
+      
+//           }
+
+
+//           i++;
 //     }
 
 

@@ -17,8 +17,9 @@ enum tokenkinds:int{
 // #define KEYWORD(X,Y)    TOK(kw_ ## X)
 
 #include "tokenkinds.def"
+
+number_of_tokens,
 keyword_tok,
-number_of_tokens
 #undef TOK
 #undef PUNCTUATOR
 // #undef KEYWORD
@@ -32,6 +33,8 @@ unclosed_string,
 wrong_identifier,
 undefined,
 noerrors,
+not_closed_multiline_comment,
+wrong_floating_number,
 number_of_errors
 };
 
@@ -93,3 +96,12 @@ keyword();
 
 };
 
+
+
+//finding the name string of the token from its enum number 
+
+class token_name_string{
+public:
+    token_name_string();
+    map<int,string>lookup;
+};

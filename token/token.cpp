@@ -52,9 +52,37 @@ bool keyword::is_keyword(char * type){
 }
 
 
+
+
+
+
+
+token_name_string::token_name_string(){
+    #define TOK(x) #x,
+    #define PUNCTUATOR(X,Y) #X,
+    #define KEYWORD(X,Y) #X,
+    char *arr[]={
+
+        #include "tokenkinds.def"
+    };
+    #undef TOK
+
+
+    for (int i=0;i<number_of_tokens;i++){
+
+        lookup[i]=arr[i];
+    }
+}
+
+
+
 // int main(){
 
-//      keyword obj;
+//     token tok;
 
-//      cout<<obj.is_keyword("int");
+//     tok.kind=numeric_constant;
+
+//     token_name_string obj;
+
+//     cout<<obj.lookup[tok.kind]<<endl;
 // }

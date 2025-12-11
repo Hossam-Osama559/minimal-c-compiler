@@ -1,0 +1,137 @@
+translation unit:
+
+                    declaration-seq
+
+
+
+
+declaration-seq:
+        declaration declaration-seq-tail
+
+declaration-seq-tail:
+        declaration declaration-seq-tail
+        ε
+
+
+
+
+declaration:
+					// those 2 have common factor so i will parse the common then decide 
+                	var-declaration
+ 	                function-definition
+
+
+
+var-declaration:
+
+                     decl-specifier-seq init-declarator-list ;
+
+
+
+decl-specifier-seq:	
+
+
+                 	char
+ 	                char16_t     
+ 	                char32_t     
+ 	                wchar_t
+ 	                bool
+ 	                short
+ 	                int
+ 	                long
+ 	                signed
+ 	                unsigned
+ 	                float
+ 	                double
+ 	                void
+
+
+
+init-declarator-list:
+        init-declarator init-declarator-list-tail
+
+init-declarator-list-tail:
+        , init-declarator init-declarator-list-tail
+        ε
+
+
+
+
+
+init-declarator:
+
+                	declarator initializer"opt"
+
+
+declarator:
+
+                
+                    identifier
+
+
+
+initializer:
+
+                	= initializer-clause
+
+
+initializer-clause:
+
+                    int literal
+
+                    string literal 
+	
+
+
+
+
+
+function-definition:
+                    type-specifier declarator compound-statement
+
+
+declarator:
+
+                    identifier ( parameter-list-opt )
+
+
+
+
+
+compound-statement:	 
+ 					{ statement-seqopt }
+
+
+
+
+statement-seq:	 
+ 					statement
+ 					statement-seq statement
+
+
+
+
+statement:
+
+	selection-statement
+	var-declaration
+
+
+	
+
+selection-statement:	 
+ 	if ( condition ) compound-statement
+ 	if ( condition ) compound-statement else compound-statement
+
+
+condition:
+
+	primary-expression == primary-expression
+
+
+primary-expression:
+
+	identifier
+	literal 
+
+
